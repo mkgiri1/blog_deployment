@@ -35,7 +35,7 @@ DEBUG = True
 if settings.DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['eimservices.xyz', 'eimservices.xyz', '159.223.123.56', 'localhost', '127.0.0.1']
+    ALLOWED_HOSTS = ['eimservices.xyz', 'www.eimservices.xyz', '159.223.123.56', 'localhost', '127.0.0.1']
 
 SITE_ID = 1
 
