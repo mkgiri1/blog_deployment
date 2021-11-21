@@ -154,7 +154,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # WHITENOISE
 
 # Optionally, we can compress static files with Whitenoise
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Also, we can have Whitenoise look for static files in each app rather than running collectstatic
 # WHITENOISE_USE_FINDERS = True
 
