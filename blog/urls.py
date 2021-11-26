@@ -1,8 +1,6 @@
-from django.conf import settings
 from django.urls import path
 from . import views
 from .feeds import LatestPostsFeed
-from django.conf.urls.static import static
 
 app_name = 'blog'
 
@@ -22,6 +20,3 @@ urlpatterns = [
     path('feed/', LatestPostsFeed(), name='post_feed'),
     path('search/', views.post_search, name='post_search'),
 ]
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
