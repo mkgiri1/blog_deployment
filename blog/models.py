@@ -25,6 +25,8 @@ class Post(models.Model):
                               on_delete=models.CASCADE,
                               related_name='blog_posts')
     body = models.TextField()
+    image = models.ImageField(upload_to='blogimg/%Y/%m/%d',
+                              blank=True)
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
