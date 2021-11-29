@@ -6,11 +6,14 @@ from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
-
 from taggit.models import Tag
-
 from . forms import CommentForm, EmailPostForm, SearchForm, LoginForm
 from . models import Comment, Post
+# Adding Code to support Contact Email Feature
+from django.shortcuts import render, redirect
+from .forms import ContactForm
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
 
 # Create your views here.
 def post_list(request, tag_slug=None):
@@ -137,3 +140,26 @@ def about(request):
 
 def contact(request):
     return render(request, 'blog/contact.html')
+
+# Adding Code to support Contact Email Feature
+def contact(request):
+	if request.method == 'POST':
+		form = ContactForm(request.POST)
+		if form.is_valid():
+			subject = "eimServices Website Inquiry" 
+			body = {
+			'first_name': form.cleaned_data['first_name'], 
+			'last_name': form.cleaned_data['last_name'], 
+			'email': form.cleaned_data['email_address'], 
+			'message':form.cleaned_data['message'], 
+			}
+			message = "\n".join(body.values())
+
+			try:
+				send_mail(subject, message, 'mukesh.kgiri@zohomail.com', ['mukesh.kgiri@zohomail.com']) 
+			except BadHeaderError:
+				return HttpResponse('Invalid header found.')
+			#return redirect ("contact")
+      
+	form = ContactForm()
+	return render(request, "blog/contact.html", {'form':form})

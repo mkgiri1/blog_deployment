@@ -2,10 +2,25 @@
 {% block title %}Contact me{% endblock %}
 {% block content %}
 <div class="col-md-8">
-    <h1>Contact me about my blog</h1>
+    <!-- <h1>Contact me about my blog</h1>
     <p>
         Here at eimServices we do our best to fix issues you may have with our site.
         <br> email me at admin@eimservices.xyz
-    </p>
+    </p> -->
+    <div style="margin:20px">
+        <h1>Contact</h1>
+        <h4>Contact us directly if you have any questions</h4>
+        <p>
+            Please write your name, email address and a message below if you have any questions.
+            One of our staff members will be happy to contact you directly and answer your questions as soon as
+            possible.
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
 </div>
 {% endblock content %}
