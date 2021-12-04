@@ -1,6 +1,6 @@
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage,\
-                                  PageNotAnInteger
+    PageNotAnInteger
 from django.db.models import Count
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.shortcuts import render, get_object_or_404
@@ -16,6 +16,8 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
 
 # Create your views here.
+
+
 def post_list(request, tag_slug=None):
     object_list = Post.published.all()
     tag = None
@@ -23,7 +25,7 @@ def post_list(request, tag_slug=None):
         tag = get_object_or_404(Tag, slug=tag_slug)
         object_list = object_list.filter(tags__in=[tag])
 
-    paginator = Paginator(object_list, 3) # 3 posts in each page
+    paginator = Paginator(object_list, 3)  # 3 posts in each page
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -42,17 +44,16 @@ def post_list(request, tag_slug=None):
 
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, slug=post,
-                                   status='published',
-                                   publish__year=year,
-                                   publish__month=month,
-                                   publish__day=day)
+                             status='published',
+                             publish__year=year,
+                             publish__month=month,
+                             publish__day=day)
     # List of similar posts
     post_tags_ids = post.tags.values_list('id', flat=True)
     similar_posts = Post.published.filter(tags__in=post_tags_ids)\
                         .exclude(id=post.id)
     similar_posts = similar_posts.annotate(same_tags=Count('tags'))\
-                                 .order_by('-same_tags','-publish')[:4]
-
+                                 .order_by('-same_tags', '-publish')[:4]
 
     # List of active comments for this post
     comments = post.comments.filter(active=True)
@@ -68,7 +69,7 @@ def post_detail(request, year, month, day, post):
             # Save the comment to the database
             new_comment.save()
     else:
-        comment_form = CommentForm()    
+        comment_form = CommentForm()
 
     return render(request,
                   'blog/post/detail.html',
@@ -91,7 +92,7 @@ def post_share(request, post_id):
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = (
-                f"{cd['name']} recommends you read " 
+                f"{cd['name']} recommends you read "
                 f"{post.title}"
             )
             message = (
@@ -120,7 +121,7 @@ def post_search(request):
             query = search_form.cleaned_data['query']
 
             search_vector = SearchVector('title', weight='A') + \
-                            SearchVector('body', weight='B')
+                SearchVector('body', weight='B')
             search_query = SearchQuery(query)
             results = Post.published.annotate(
                 search=search_vector,
@@ -142,24 +143,30 @@ def contact(request):
     return render(request, 'blog/contact.html')
 
 # Adding Code to support Contact Email Feature
-def contact(request):
-	if request.method == 'POST':
-		form = ContactForm(request.POST)
-		if form.is_valid():
-			subject = "eimServices Website Inquiry" 
-			body = {
-			'first_name': form.cleaned_data['first_name'], 
-			'last_name': form.cleaned_data['last_name'], 
-			'email': form.cleaned_data['email_address'], 
-			'message':form.cleaned_data['message'], 
-			}
-			message = "\n".join(body.values())
 
-			try:
-				send_mail(subject, message, 'mukesh.kgiri@zohomail.com', ['mukesh.kgiri@zohomail.com']) 
-			except BadHeaderError:
-				return HttpResponse('Invalid header found.')
-			#return redirect ("contact")
-      
-	form = ContactForm()
-	return render(request, "blog/contact.html", {'form':form})
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = "eimServices Website Inquiry"
+            body = {
+                'first_name': form.cleaned_data['first_name'],
+                'last_name': form.cleaned_data['last_name'],
+                'email': form.cleaned_data['email_address'],
+                'message': form.cleaned_data['message'],
+            }
+            message = "\n".join(body.values())
+
+            try:
+                send_mail(subject, message, 'mukesh.kgiri@zohomail.com',
+                          ['mukesh.kgiri@zohomail.com'])
+
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+
+            # return HttpResponse('Success! Thank you for your message.')
+
+    form = ContactForm()
+
+    return render(request, "blog/contact.html", {'form': form})

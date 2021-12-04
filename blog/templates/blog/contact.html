@@ -7,20 +7,28 @@
         Here at eimServices we do our best to fix issues you may have with our site.
         <br> email me at admin@eimservices.xyz
     </p> -->
-    <div style="margin:20px">
-        <h1>Contact</h1>
-        <h4>Contact us directly if you have any questions</h4>
-        <p>
-            Please write your name, email address and a message below if you have any questions.
-            One of our staff members will be happy to contact you directly and answer your questions as soon as
-            possible.
-        </p>
-        <form method="post">
-            {% csrf_token %}
-            {{form.as_p}}
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+    <h2>Contact</h2>
+    <!-- <div style="margin:20px"> -->
+    <div class="card" style="width: 100%; ">
 
+        <div class="card-body">
+
+            <h4>Contact us directly if you have any questions</h4>
+            <p>
+                Please write your name, email address and a message below if you have any questions.
+                One of our staff members will be happy to contact you directly and answer your questions as soon as
+                possible.
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                {{form.as_p}}
+                <button class="btn btn-primary" type="submit">Submit</button>
+
+            </form>
+        </div>
+
+    </div>
 </div>
+
+
 {% endblock content %}
